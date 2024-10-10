@@ -9,16 +9,13 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  try {
-    if (!process.env.PINECONE_API_KEY) {
-      throw new Error('Pinecone API key is required');
-    }
+  const apiKey = req.headers['PINECONE_API_KEY'] as string;
 
-    const apiKey = process.env.PINECONE_API_KEY;
+  try {
     const pinecone = new Pinecone({ apiKey });
 
     // Step 1: Generate a unique index name
-    const indexName = randomIndexName('e2eTestIndex');
+    const indexName = randomIndexName('edge-test');
 
     // Step 2: Check if index exists by listing indexes and searching by name
     const existingIndexes = await pinecone.listIndexes();
