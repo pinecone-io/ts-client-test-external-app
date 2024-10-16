@@ -3,16 +3,23 @@
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Pinecone } from '@pinecone-database/pinecone';
-import { generateRecords, randomIndexName, sleep } from '../../helpers/helpers';
+import {
+  generateRecords,
+  randomIndexName,
+  waitUntilReadyForQuerying,
+} from '../../helpers/helpers';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const apiKey = req.headers['PINECONE_API_KEY'] as string;
+  const apiKey = req.headers['pinecone_api_key'] as string;
+  if (!apiKey) {
+    return res.status(401).json({ error: 'API key missing in headers' });
+  }
 
   try {
-    const pinecone = new Pinecone({ apiKey });
+    const pinecone = new Pinecone({ apiKey: apiKey });
 
     // Step 1: Generate a unique index name
     const indexName = randomIndexName('edge-test');
@@ -39,7 +46,7 @@ export default async function handler(
       });
     }
 
-    // Step 3: Check if index is empty, seed data if necessary
+    // Step 3: Seed data if index is empty
     const index = pinecone.Index(indexName);
     const stats = await index.describeIndexStats();
     if (stats.totalRecordCount === 0) {
@@ -54,16 +61,16 @@ export default async function handler(
       await index.upsert(records);
     }
 
-    // Step 4: Query the index to verify data
-    console.log('Index name =', await index.describeIndexStats());
-    await sleep(5000);
+    await waitUntilReadyForQuerying(pinecone, indexName);
+
+    // Step 4. Query index
     const queryResponse = await index.query({
       topK: 1,
       vector: [0.236, 0.971],
     });
     console.log('Query response =', queryResponse);
 
-    // Send the query results back
+    // Step 5. Send the query results back
     res.status(200).json({ queryResult: queryResponse });
   } catch (error) {
     res.status(500).json({ error: error.message });

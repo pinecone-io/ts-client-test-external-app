@@ -97,14 +97,36 @@ export const sleep = async (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-export const waitUntilReady = async (indexName: string) => {
-  const p = new Pinecone();
+export const waitUntilReady = async (
+  pineconeConnection: Pinecone,
+  indexName: string
+) => {
   const sleepIntervalMs = 1000;
 
-  let description = await p.describeIndex(indexName);
+  let description = await pineconeConnection.describeIndex(indexName);
   while (description.status?.state !== 'Ready') {
     await sleep(sleepIntervalMs);
-    description = await p.describeIndex(indexName);
+    description = await pineconeConnection.describeIndex(indexName);
+  }
+};
+
+export const waitUntilReadyForQuerying = async (
+  pineconeConnection: Pinecone,
+  indexName: string
+) => {
+  const sleepIntervalMs = 1000;
+
+  const index = await pineconeConnection.Index(indexName);
+  let queryResponse = await index.query({
+    topK: 1,
+    vector: [0.236, 0.971],
+  });
+  while (queryResponse.matches.length === 0) {
+    await sleep(sleepIntervalMs);
+    queryResponse = await index.query({
+      topK: 1,
+      vector: [0.236, 0.971],
+    });
   }
 };
 
