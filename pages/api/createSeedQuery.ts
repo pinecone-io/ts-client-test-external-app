@@ -8,6 +8,8 @@ import {
   randomIndexName,
   waitUntilReadyForQuerying,
 } from '../../helpers/helpers';
+import { EdgeRuntime } from 'edge-runtime'
+
 
 export default async function handler(
   req: NextApiRequest,
