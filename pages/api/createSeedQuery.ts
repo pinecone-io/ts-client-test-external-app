@@ -9,6 +9,8 @@ import {
   waitUntilReadyForQuerying,
 } from '../../helpers/helpers';
 
+let lastGeneratedIndexName: string | null = null;
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -19,10 +21,12 @@ export default async function handler(
   }
 
   try {
+    console.log('Creating Pinecone client with API key:', apiKey);
     const pinecone = new Pinecone({ apiKey: apiKey });
 
     // Step 1: Generate a unique index name
     const indexName = randomIndexName('edge-test');
+    lastGeneratedIndexName = indexName;
 
     // Step 2: Check if index exists by listing indexes and searching by name
     const existingIndexes = await pinecone.listIndexes();
@@ -76,3 +80,5 @@ export default async function handler(
     res.status(500).json({ error: error.message });
   }
 }
+
+export const getLastGeneratedIndexName = () => lastGeneratedIndexName;

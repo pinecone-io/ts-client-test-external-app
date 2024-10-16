@@ -1,19 +1,20 @@
+// Notes:
+// - Middleware can only be run in NextJS when using the Edge runtime
+// - Headers() is an Edge-runtime-specific interface: https://developer.mozilla.org/en-US/docs/Web/API/Headers
+// - Edge runtime supported APIs: https://vercel.com/docs/functions/edge-middleware/edge-runtime
+
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  // Retrieve the API key from headers
-  const apiKey = request.headers.get('PINECONE_API_KEY');
+  // Set new headers
+  const newHeaders = new Headers(request.headers);
+  newHeaders.append('x-call-from', 'ts-client-e2e-tests');
 
-  // Check if the API key is present
-  if (!apiKey) {
-    // If the API key is missing, return a 401 Unauthorized response
-    return NextResponse.json(
-      { error: 'PINECONE_API_KEY header is required' },
-      { status: 401 }
-    );
-  }
-
-  // Allow the request to proceed if the API key is present
-  return NextResponse.next();
+  // Set new request headers
+  return NextResponse.next({
+    request: {
+      headers: newHeaders,
+    },
+  });
 }
