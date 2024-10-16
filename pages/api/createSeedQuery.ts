@@ -9,13 +9,13 @@ import {
   waitUntilReadyForQuerying,
 } from '../../helpers/helpers';
 
-let lastGeneratedIndexName: string | null = null;
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // Retrieve passed-in API key
   const apiKey = req.headers['pinecone_api_key'] as string;
+
   if (!apiKey) {
     return res.status(401).json({ error: 'API key missing in headers' });
   }
@@ -26,7 +26,6 @@ export default async function handler(
 
     // Step 1: Generate a unique index name
     const indexName = randomIndexName('edge-test');
-    lastGeneratedIndexName = indexName;
 
     // Step 2: Check if index exists by listing indexes and searching by name
     const existingIndexes = await pinecone.listIndexes();
@@ -72,13 +71,12 @@ export default async function handler(
       topK: 1,
       vector: [0.236, 0.971],
     });
-    console.log('Query response =', queryResponse);
+    console.log('Query response = ', queryResponse);
+    console.log('Index name = ', indexName);
 
     // Step 5. Send the query results back
-    res.status(200).json({ queryResult: queryResponse });
+    res.status(200).json({ queryResult: queryResponse, indexName: indexName });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 }
-
-export const getLastGeneratedIndexName = () => lastGeneratedIndexName;
