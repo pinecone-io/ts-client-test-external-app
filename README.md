@@ -1,3 +1,3 @@
-spin up dev server: `next dev`
+## Contributing
 
-todo: change deps to dev deps for things like eslint, prettier, etc.
+[to do]
