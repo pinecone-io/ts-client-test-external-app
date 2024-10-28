@@ -8,7 +8,6 @@ import {
   randomIndexName,
   waitUntilReadyForQuerying,
 } from '../../helpers/helpers';
-import { EdgeRuntime } from 'edge-runtime'
 
 
 export default async function handler(
@@ -23,7 +22,6 @@ export default async function handler(
   }
 
   try {
-    console.log('Creating Pinecone client with API key:', apiKey);
     const pinecone = new Pinecone({ apiKey: apiKey });
 
     // Step 1: Generate a unique index name
