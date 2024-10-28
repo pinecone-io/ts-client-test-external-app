@@ -75,6 +75,9 @@ export default async function handler(
     console.log('Index name = ', indexName);
 
     // Step 5. Send the query results back
+    if (res.status(200)) {
+      console.log('Test passed!');
+    }
     res.status(200).json({ queryResult: queryResponse, indexName: indexName });
   } catch (error) {
     res.status(500).json({ error: error.message });
