@@ -8,7 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@pinecone-database/pinecone": "^3.0.4-rc.2024-10.0",
+    "@pinecone-database/pinecone": "^4.1.0",
     "edge-runtime": "^3.0.3",
     "next": "latest"
   },
