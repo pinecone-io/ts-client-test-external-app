@@ -9,7 +9,6 @@ import {
   waitUntilReadyForQuerying,
 } from '../../helpers/helpers';
 
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -63,8 +62,6 @@ export default async function handler(
       });
       await index.upsert(records);
     }
-
-    await waitUntilReadyForQuerying(pinecone, indexName);
 
     // Step 4. Query index
     const queryResponse = await index.query({
