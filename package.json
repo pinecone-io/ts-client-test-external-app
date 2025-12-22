@@ -10,7 +10,7 @@
   "dependencies": {
     "@pinecone-database/pinecone": "^5.1.2",
     "edge-runtime": "^3.0.3",
-    "next": "latest"
+    "next": "^15.3.6"
   },
   "devDependencies": {
     "@types/node": "22.10.7",
