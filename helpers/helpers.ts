@@ -116,7 +116,7 @@ export const waitUntilReadyForQuerying = async (
 ) => {
   const sleepIntervalMs = 1000;
 
-  const index = await pineconeConnection.Index({ name: indexName });
+  const index = await pineconeConnection.Index(indexName);
   let queryResponse = await index.query({
     topK: 1,
     vector: [0.236, 0.971],

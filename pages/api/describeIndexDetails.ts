@@ -24,7 +24,7 @@ export default async function handler(
 
   try {
     const pinecone = new Pinecone({ apiKey: apiKey });
-    const index = pinecone.Index({ name: indexName });
+    const index = pinecone.Index(indexName);
     const indexDescription = await pinecone.describeIndex(indexName);
     const indexStats = await index.describeIndexStats();
 
