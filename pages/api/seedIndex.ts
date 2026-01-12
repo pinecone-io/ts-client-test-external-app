@@ -26,7 +26,7 @@ export default async function handler(
   try {
     const pinecone = new Pinecone({ apiKey: apiKey });
 
-    const index = pinecone.Index(indexName);
+    const index = pinecone.Index({ name: indexName });
     const stats = await index.describeIndexStats();
     if (stats.totalRecordCount === 0) {
       console.log('Index is empty; seeding data into the index...');
