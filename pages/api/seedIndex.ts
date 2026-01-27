@@ -7,7 +7,7 @@ import { generateRecords } from '../../helpers/helpers';
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const apiKey = req.headers['pinecone_api_key'] as string;
   const indexName = req.headers['pinecone_index_name'] as string;
@@ -37,7 +37,7 @@ export default async function handler(
         withSparseValues: true,
         withMetadata: true,
       });
-      await index.upsert(records);
+      await index.upsert({ records });
     }
 
     res
