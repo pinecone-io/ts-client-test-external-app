@@ -8,7 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@pinecone-database/pinecone": "*",
+    "@pinecone-database/pinecone": "git+https://github.com/pinecone-io/pinecone-ts-client.git#adenoble/update-data-plane-namespace-targeting",
     "edge-runtime": "^3.0.3",
     "next": "^16.1.0"
   },
