@@ -37,9 +37,8 @@ jobs:
         run: npm run build
 
   audit:
-    name: npm audit (advisory)
+    name: npm audit (fail on high or critical)
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -54,4 +53,4 @@ jobs:
         run: npm ci
 
       - name: Audit
-        run: npm audit --audit-level=moderate
+        run: npm audit --audit-level=high
